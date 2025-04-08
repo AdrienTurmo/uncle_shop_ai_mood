@@ -1,15 +1,18 @@
 import * as React from 'react';
 import { createContext, useContext, useState } from 'react';
-import { Trait } from '@/type';
+import { Mood, Trait, TraitValues } from '@/type';
+import { calculateMood } from '@/services/MoodCalculator.ts';
 
 interface TraitsContextData {
     getValueOf: (trait: Trait) => number
     changeValueOf: (trait: Trait, newValue: number) => void
+    getMood: () => Mood
 }
 
 const TraitsContext: React.Context<TraitsContextData> = createContext({
     getValueOf: () => 0,
     changeValueOf: () => {},
+    getMood: () => 'NEUTRAL',
 } as TraitsContextData);
 
 const useTraitsContext = () => useContext(TraitsContext)
@@ -19,43 +22,47 @@ interface TraitsContextParams {
 }
 
 const TraitsContextProvider: React.FC<TraitsContextParams> = ({ children }) => {
-    const [joyValue, setJoyValue] = useState(0)
-    const [miseryValue, setMiseryValue] = useState(0)
-    const [passionValue, setPassionValue] = useState(0)
-    const [doubtValue, setDoubtValue] = useState(0)
+    const [traits, setTraits] = useState<TraitValues>({
+        joy: 0,
+        misery: 0,
+        passion: 0,
+        doubt: 0,
+    })
 
     const getValueOf = (trait: Trait): number => {
         switch (trait) {
             case 'JOY':
-                return joyValue;
+                return traits.joy;
             case 'MISERY':
-                return miseryValue;
+                return traits.misery;
             case 'PASSION':
-                return passionValue;
+                return traits.passion;
             case 'DOUBT':
-                return doubtValue;
+                return traits.doubt;
         }
     }
 
     const changeValueOf = (trait: Trait, newValue: number) => {
         switch (trait) {
             case 'JOY':
-                setJoyValue(newValue);
+                setTraits(prev => ({ ...prev, joy: newValue }));
                 break;
             case 'MISERY':
-                setMiseryValue(newValue);
+                setTraits(prev => ({ ...prev, misery: newValue }));
                 break;
             case 'PASSION':
-                setPassionValue(newValue);
+                setTraits(prev => ({ ...prev, passion: newValue }));
                 break;
             case 'DOUBT':
-                setDoubtValue(newValue);
+                setTraits(prev => ({ ...prev, doubt: newValue }));
                 break;
         }
     }
 
+    const getMood = () => calculateMood(traits)
+
     return (
-        <TraitsContext.Provider value={{ getValueOf, changeValueOf }}>
+        <TraitsContext.Provider value={{ getValueOf, changeValueOf, getMood }}>
             {children}
         </TraitsContext.Provider>
     );
