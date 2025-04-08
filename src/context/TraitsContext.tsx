@@ -7,12 +7,14 @@ interface TraitsContextData {
     getValueOf: (trait: Trait) => number
     changeValueOf: (trait: Trait, newValue: number) => void
     getMood: () => Mood
+    // useXp: (xp: XpSelector) => void
 }
 
 const TraitsContext: React.Context<TraitsContextData> = createContext({
     getValueOf: () => 0,
     changeValueOf: () => {},
     getMood: () => 'NEUTRAL',
+    // useXp: () => {},
 } as TraitsContextData);
 
 const useTraitsContext = () => useContext(TraitsContext)
@@ -60,6 +62,10 @@ const TraitsContextProvider: React.FC<TraitsContextParams> = ({ children }) => {
     }
 
     const getMood = () => calculateMood(traits)
+
+    // const useXp: (xp: XpSelector) => {
+    //
+    // }
 
     return (
         <TraitsContext.Provider value={{ getValueOf, changeValueOf, getMood }}>

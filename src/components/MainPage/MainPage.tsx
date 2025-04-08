@@ -9,7 +9,7 @@ export const MainPage: React.FC = () => {
     return (
         <TraitsContextProvider>
             <div className={styles.MainPage}>
-                <h1>Oncle Shop's Rocket Shop AI Mood Calculator</h1>
+                <h1>Uncle Chop's Rocket Shop AI Mood Calculator</h1>
                 <TraitsList />
                 <MoodDisplay />
             </div>

@@ -3,12 +3,14 @@
   flex-direction: column;
   width: 100%;
   align-items: center;
+  gap: 8px;
 
   .List {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     width: 100%;
     align-items: center;
-    gap: 8px;
+    justify-content: center;
+    gap: 16px;
   }
 }
