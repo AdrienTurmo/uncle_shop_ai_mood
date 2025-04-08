@@ -24,9 +24,9 @@ export const NumberInput: React.FC<NumberInputParams> = (
 
     return (
         <div className={styles.NumberInput}>
-            <div onClick={onClick('MINUS')}>-</div>
-            <div>{value}</div>
-            <div onClick={onClick('PLUS')}>+</div>
+            <div onClick={onClick('MINUS')} className={styles.ButtonMinus}>-</div>
+            <div className={styles.Input}>{value}</div>
+            <div onClick={onClick('PLUS')} className={styles.ButtonPlus}>+</div>
         </div>
     )
 }

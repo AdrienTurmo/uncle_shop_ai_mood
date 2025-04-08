@@ -1,3 +1,35 @@
 .NumberInput {
   display: flex;
+  height: 32px;
+
+  .ButtonPlus, .ButtonMinus {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid black;
+    width: 20px;
+    cursor: pointer;
+    user-select: none;
+
+    &:hover {
+      background-color: grey;
+    }
+  }
+
+  .ButtonMinus {
+    border-radius: 8px 0 0 8px;
+  }
+
+  .ButtonPlus {
+    border-radius: 0 8px 8px 0;
+  }
+
+  .Input {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    width: 20px;
+  }
 }
