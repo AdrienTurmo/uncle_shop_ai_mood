@@ -17,16 +17,17 @@ const traitDisplayName = new Map<Trait, string>([
 ])
 
 export const TraitInput: React.FC<TraitInputParams> = ({ trait }) => {
-    const { getValueOf, changeValueOf } = useTraitsContext()
+    const { getValueOf, changeValueOf, getXpOf } = useTraitsContext()
     const value = getValueOf(trait)
+    const xpValue = getXpOf(trait)
 
     return (
         <div className={styles.TraitInput}>
             <div className={styles.SquareGroup}>
-                <div className={clsx(styles.Square, value >= 4 && styles.Visible)} />
-                <div className={clsx(styles.Square, value >= 3 && styles.Visible)} />
-                <div className={clsx(styles.Square, value >= 2 && styles.Visible)} />
-                <div className={clsx(styles.Square, value >= 1 && styles.Visible)} />
+                <div className={clsx(styles.Square, value + xpValue >= 4 && styles.VisibleRed, value >= 4 && styles.VisibleWhite)} />
+                <div className={clsx(styles.Square, value + xpValue >= 3 && styles.VisibleRed, value >= 3 && styles.VisibleWhite)} />
+                <div className={clsx(styles.Square, value + xpValue >= 2 && styles.VisibleRed, value >= 2 && styles.VisibleWhite)} />
+                <div className={clsx(styles.Square, value + xpValue >= 1 && styles.VisibleRed, value >= 1 && styles.VisibleWhite)} />
                 <div className={styles.HalfSquare} />
             </div>
             <div>{traitDisplayName.get(trait)}</div>

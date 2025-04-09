@@ -1,2 +1,3 @@
-export * from './Moods'
-export * from './Traits'
+export * from './Moods.ts'
+export * from './Traits.ts'
+export * from './XpSelector.ts'

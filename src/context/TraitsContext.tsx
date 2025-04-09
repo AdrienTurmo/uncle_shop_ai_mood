@@ -1,20 +1,28 @@
 import * as React from 'react';
 import { createContext, useContext, useState } from 'react';
-import { Mood, Trait, TraitValues } from '@/type';
+import { Mood, Trait, TraitValues, XpSelector } from '@/type';
 import { calculateMood } from '@/services/MoodCalculator.ts';
 
 interface TraitsContextData {
     getValueOf: (trait: Trait) => number
     changeValueOf: (trait: Trait, newValue: number) => void
     getMood: () => Mood
-    // useXp: (xp: XpSelector) => void
+    getMoodWithXp: () => Mood
+    getXpOf: (trait: Trait) => number
+    addXp: (xp: XpSelector) => void
+    isValid: () => boolean
+    reset: () => void
 }
 
 const TraitsContext: React.Context<TraitsContextData> = createContext({
     getValueOf: () => 0,
     changeValueOf: () => {},
     getMood: () => 'NEUTRAL',
-    // useXp: () => {},
+    getMoodWithXp: () => 'NEUTRAL',
+    getXpOf: () => 0,
+    addXp: () => {},
+    isValid: () => true,
+    reset: () => {},
 } as TraitsContextData);
 
 const useTraitsContext = () => useContext(TraitsContext)
@@ -24,54 +32,33 @@ interface TraitsContextParams {
 }
 
 const TraitsContextProvider: React.FC<TraitsContextParams> = ({ children }) => {
-    const [traits, setTraits] = useState<TraitValues>({
-        joy: 0,
-        misery: 0,
-        passion: 0,
-        doubt: 0,
-    })
+    const [traits, setTraits] = useState<TraitValues>(new TraitValues(0, 0, 0, 0))
+    const [xps, setXps] = useState<TraitValues>(new TraitValues(0, 0, 0, 0))
 
-    const getValueOf = (trait: Trait): number => {
-        switch (trait) {
-            case 'JOY':
-                return traits.joy;
-            case 'MISERY':
-                return traits.misery;
-            case 'PASSION':
-                return traits.passion;
-            case 'DOUBT':
-                return traits.doubt;
-        }
-    }
+    const getValueOf = (trait: Trait): number => traits.get(trait)
 
-    const changeValueOf = (trait: Trait, newValue: number) => {
-        switch (trait) {
-            case 'JOY':
-                setTraits(prev => ({ ...prev, joy: newValue }));
-                break;
-            case 'MISERY':
-                setTraits(prev => ({ ...prev, misery: newValue }));
-                break;
-            case 'PASSION':
-                setTraits(prev => ({ ...prev, passion: newValue }));
-                break;
-            case 'DOUBT':
-                setTraits(prev => ({ ...prev, doubt: newValue }));
-                break;
-        }
-    }
+    const changeValueOf = (trait: Trait, newValue: number) => setTraits(prev => prev.set(trait, newValue))
 
     const getMood = () => calculateMood(traits)
+    const getMoodWithXp = () => calculateMood(traits.add(xps))
 
-    // const useXp: (xp: XpSelector) => {
-    //
-    // }
+    const getXpOf = (trait: Trait): number => xps.get(trait)
+
+    const addXp = (xp: XpSelector) => setXps(prev => prev.addXp(xp))
+
+    const reset = () => {
+        setTraits(new TraitValues(0, 0, 0, 0))
+        setXps(new TraitValues(0, 0, 0, 0))
+    }
+
+    const isValid = () => (traits.add(xps)).isValid()
 
     return (
-        <TraitsContext.Provider value={{ getValueOf, changeValueOf, getMood }}>
+        <TraitsContext.Provider value={{ getValueOf, changeValueOf, getMood, getMoodWithXp, getXpOf, addXp, reset, isValid }}>
             {children}
         </TraitsContext.Provider>
     );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export { useTraitsContext, TraitsContextProvider };

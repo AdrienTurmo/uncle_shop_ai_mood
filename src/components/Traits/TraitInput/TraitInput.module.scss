@@ -16,7 +16,11 @@
     width: 20px;
     background-color: transparent;
 
-    &.Visible {
+    &.VisibleRed {
+      background-color: red;
+    }
+
+    &.VisibleWhite {
       background-color: white;
     }
   }

@@ -1,8 +1,7 @@
 import * as React from 'react';
 import styles from './MainPage.module.scss'
-import { TraitsList } from '@/components/TraitsList/TraitsList.tsx';
+import { MoodDisplay, TraitsList, XpSelectorDisplay } from '@/components';
 import { TraitsContextProvider } from '@/context/TraitsContext.tsx';
-import { MoodDisplay } from '@/components/MoodDisplay/MoodDisplay.tsx';
 
 
 export const MainPage: React.FC = () => {
@@ -12,6 +11,7 @@ export const MainPage: React.FC = () => {
                 <h1>Uncle Chop's Rocket Shop AI Mood Calculator</h1>
                 <TraitsList />
                 <MoodDisplay />
+                <XpSelectorDisplay />
             </div>
         </TraitsContextProvider>
     )

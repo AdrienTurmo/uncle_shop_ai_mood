@@ -1,0 +1,22 @@
+.XpSelectorDisplay {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .List {
+        display: flex;
+        gap: 16px;
+
+        > * {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: center;
+            cursor: pointer;
+
+            &:hover {
+                background-color: red;
+            }
+        }
+    }
+}
