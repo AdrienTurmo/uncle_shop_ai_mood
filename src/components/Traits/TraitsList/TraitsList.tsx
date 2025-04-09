@@ -4,11 +4,11 @@ import { TraitInput } from '@/components';
 import { useTraitsContext } from '@/context/TraitsContext.tsx';
 
 export const TraitsList: React.FC = () => {
-    const { reset, isValid } = useTraitsContext()
+    const { resetAll, isValid } = useTraitsContext()
     return (
         <div className={styles.TraitsList}>
-            <button type="button" onClick={() => reset()}>Reset</button>
-            <div>Traits:</div>
+            <button type="button" onClick={() => resetAll()}>Reset All</button>
+            <h3>Traits:</h3>
             {!isValid() && <div>OVERLOAD</div>}
             {isValid() && <div>----</div>}
             <div className={styles.List}>

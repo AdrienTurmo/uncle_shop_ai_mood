@@ -1,0 +1,26 @@
+.TargetMood {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+
+  .MoodList {
+    display: flex;
+    gap: 10px;
+
+    .Selected {
+      background-color: red;
+    }
+  }
+
+  .PathList {
+    display: flex;
+    flex-direction: column;
+
+    .XpList {
+      display: flex;
+      gap: 4px;
+    }
+  }
+}

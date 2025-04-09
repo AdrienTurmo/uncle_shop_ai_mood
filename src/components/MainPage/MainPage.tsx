@@ -2,9 +2,11 @@ import * as React from 'react';
 import styles from './MainPage.module.scss'
 import { MoodDisplay, TraitsList, XpSelectorDisplay } from '@/components';
 import { TraitsContextProvider } from '@/context/TraitsContext.tsx';
-
+import { TargetMood } from '@/components/TargetMood/TargetMood.tsx';
 
 export const MainPage: React.FC = () => {
+
+
     return (
         <TraitsContextProvider>
             <div className={styles.MainPage}>
@@ -12,8 +14,10 @@ export const MainPage: React.FC = () => {
                 <TraitsList />
                 <MoodDisplay />
                 <XpSelectorDisplay />
+                <TargetMood />
             </div>
         </TraitsContextProvider>
     )
 }
+
 
