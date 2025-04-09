@@ -28,8 +28,9 @@ interface TraitsContextData {
     resetTraits: () => void
     resetXp: () => void
     resetAll: () => void
-    getTraits: () => TraitValues
-    getXpsSelected: () => XpsSelected
+    traits: TraitValues
+    xpsSelected: XpsSelected
+    changeXps: (newXp: XpsSelected) => void
 }
 
 const TraitsContext: React.Context<TraitsContextData> = createContext({
@@ -45,8 +46,9 @@ const TraitsContext: React.Context<TraitsContextData> = createContext({
     resetTraits: () => {},
     resetXp: () => {},
     resetAll: () => {},
-    getTraits: () => new TraitValues(0, 0, 0, 0),
-    getXpsSelected: () => defaultXpsSelected,
+    traits: new TraitValues(0, 0, 0, 0),
+    xpsSelected: defaultXpsSelected,
+    changeXps: () => {},
 } as TraitsContextData);
 
 const useTraitsContext = () => useContext(TraitsContext)
@@ -101,6 +103,15 @@ const TraitsContextProvider: React.FC<TraitsContextParams> = ({ children }) => {
 
     const isValid = () => (traits.add(xps)).isValid()
 
+    const changeXps = (newXp: XpsSelected) => {
+        resetXp()
+        Object.entries(newXp).forEach(([key, value]) => {
+            for (let i = 0; i < value; i++) {
+                addXp(key as XpSelector)
+            }
+        });
+    }
+
     return (
         <TraitsContext.Provider value={{
             getValueOf,
@@ -115,8 +126,9 @@ const TraitsContextProvider: React.FC<TraitsContextParams> = ({ children }) => {
             resetXp,
             resetAll,
             isValid,
-            getTraits: () => traits,
-            getXpsSelected: () => xpsSelected,
+            traits,
+            xpsSelected,
+            changeXps,
         }}>
             {children}
         </TraitsContext.Provider>

@@ -5,8 +5,7 @@ import { NumberInput } from '@/components';
 
 
 export const XpSelectorDisplay: React.FC = () => {
-    const { getXpsSelected, addXp, removeXp, resetXp } = useTraitsContext();
-    const xpsSelected = getXpsSelected();
+    const { xpsSelected, addXp, removeXp, resetXp } = useTraitsContext();
 
     return (
         <div className={styles.XpSelectorDisplay}>

@@ -5,9 +5,9 @@ import clsx from 'clsx';
 import { useTraitsContext, XpsSelected } from '@/context/TraitsContext.tsx';
 import { useState } from 'react';
 
-const displayXpSelected = (xpSelecteds: XpsSelected[]) => {
+const displayXpSelected = (onClick: (newXp: XpsSelected) => void) => (xpSelecteds: XpsSelected[]) => {
     return xpSelecteds.map((t, i) => (
-        <div key={i} className={styles.XpList}>
+        <div key={i} className={styles.XpList} onClick={() => onClick(t)}>
             {t.Bath != 0 && (<div>Bath : {t.Bath}</div>)}
             {t.Food != 0 && (<div>Food : {t.Food}</div>)}
             {t.Cake != 0 && (<div>Cake : {t.Cake}</div>)}
@@ -20,14 +20,15 @@ const displayXpSelected = (xpSelecteds: XpsSelected[]) => {
 }
 
 export const TargetMood = () => {
-    const { getTraits } = useTraitsContext()
+    const { traits, changeXps } = useTraitsContext()
 
     const [selectedMood, setSelectedMood] = useState<Mood | undefined>()
-    const traits = getTraits()
 
     const onClick = (mood: Mood) => () => {
         setSelectedMood(prev => prev === mood ? undefined : mood)
     }
+
+    const displayer = displayXpSelected(changeXps)
 
     const selectButton = (mood: Mood) => {
         return (
@@ -55,9 +56,9 @@ export const TargetMood = () => {
                 {selectButton('LOVE')}
                 {selectButton('SHY')}
             </div>
-            <div className={styles.Title}>Possible path:</div>
+            <div className={styles.Title}>Possible paths:</div>
             <div className={styles.PathList}>
-                {selectedMood && displayXpSelected(findPossiblePath(traits, selectedMood))}
+                {selectedMood && displayer(findPossiblePath(traits, selectedMood))}
             </div>
         </div>
     )

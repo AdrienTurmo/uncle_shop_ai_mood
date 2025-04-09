@@ -56,7 +56,7 @@ export const findValidXp = (targetTrait: TraitValues) => (xpSelected: XpsSelecte
     return result;
 }
 
-const filterUnique = (array: any[]) => Array.from(
+const filterUnique = <T>(array: T[]): T[] => Array.from(
     new Map(array.map(obj => [JSON.stringify(obj), obj])).values()
 );
 
@@ -77,6 +77,10 @@ export const findPossiblePath = (startingTrait: TraitValues, targetMood: Mood): 
     const possibleTraits = allTraitForMoods
         .map((t) => t.diff(startingTrait))
         .filter((t) => t != 'INVALID')
+        .filter((t) => !t.isEmpty())
 
     return filterUnique(possibleTraits.flatMap((pt) => findPath(pt)))
+        .sort((a,b) => sum(a) - sum(b))
 }
+
+const sum = (xp: XpsSelected) => Object.values(xp).reduce((prev, current) => prev + current)

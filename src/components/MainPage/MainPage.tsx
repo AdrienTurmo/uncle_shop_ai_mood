@@ -13,9 +13,9 @@ export const MainPage: React.FC = () => {
                 <h1>Uncle Chop's Rocket Shop AI Mood Calculator</h1>
                 <div className={styles.TraitsAndMood}>
                     <TraitsList />
-                    <MoodDisplay />
+                    <XpSelectorDisplay />
                 </div>
-                <XpSelectorDisplay />
+                <MoodDisplay />
                 <TargetMood />
             </div>
         </TraitsContextProvider>
