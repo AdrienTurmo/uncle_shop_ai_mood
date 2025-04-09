@@ -3,7 +3,7 @@ export type XpSelector =
     'Food' |
     'Cake' |
     'Nature' |
-    'Hangover Poo' |
+    'Hangover_Poo' |
     'Rain' |
     'Death' |
     'Stress';

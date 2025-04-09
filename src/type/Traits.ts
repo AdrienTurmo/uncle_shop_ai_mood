@@ -1,4 +1,5 @@
 import { XpSelector } from '@/type/XpSelector.ts';
+import { Mood } from '@/type/Moods.ts';
 
 export type Trait =
     'JOY' |
@@ -7,17 +8,17 @@ export type Trait =
     'DOUBT';
 
 export class TraitValues {
-    private readonly joy: number;
-    private readonly misery: number;
-    private readonly passion: number;
-    private readonly doubt: number;
+    readonly joy: number;
+    readonly misery: number;
+    readonly passion: number;
+    readonly doubt: number;
 
     private XP_EFFECTS = new Map<XpSelector, number[]>([
         ['Bath', [2, 0, 0, 0]],
         ['Food', [2, 0, 0, 1]],
         ['Cake', [1, 0, 1, 0]],
         ['Nature', [0, 0, 2, 0]],
-        ['Hangover Poo', [0, 1, 0, 2]],
+        ['Hangover_Poo', [0, 1, 0, 2]],
         ['Rain', [0, 1, 0, 0]],
         ['Death', [0, 3, 0, 0]],
         ['Stress', [0, 0, 0, 3]],
@@ -48,16 +49,29 @@ export class TraitValues {
         }
     }
 
-    set(trait: Trait, newValue: number) {
+    increase(trait: Trait) {
         switch (trait) {
             case 'JOY':
-                return new TraitValues(newValue, this.misery, this.passion, this.doubt);
+                return new TraitValues(Math.min(4, this.joy + 1), this.misery, this.passion, this.doubt);
             case 'MISERY':
-                return new TraitValues(this.joy, newValue, this.passion, this.doubt);
+                return new TraitValues(this.joy, Math.min(4, this.misery + 1), this.passion, this.doubt);
             case 'PASSION':
-                return new TraitValues(this.joy, this.misery, newValue, this.doubt);
+                return new TraitValues(this.joy, this.misery, Math.min(4, this.passion + 1), this.doubt);
             case 'DOUBT':
-                return new TraitValues(this.joy, this.misery, this.passion, newValue);
+                return new TraitValues(this.joy, this.misery, this.passion, Math.min(4, this.doubt + 1));
+        }
+    }
+
+    decrease(trait: Trait) {
+        switch (trait) {
+            case 'JOY':
+                return new TraitValues(Math.max(0, this.joy - 1), this.misery, this.passion, this.doubt);
+            case 'MISERY':
+                return new TraitValues(this.joy, Math.max(0, this.misery - 1), this.passion, this.doubt);
+            case 'PASSION':
+                return new TraitValues(this.joy, this.misery, Math.max(0, this.passion - 1), this.doubt);
+            case 'DOUBT':
+                return new TraitValues(this.joy, this.misery, this.passion, Math.max(0, this.doubt - 1));
         }
     }
 
@@ -80,10 +94,47 @@ export class TraitValues {
         )
     }
 
+    remove(xp: XpSelector) {
+        const xpValues = this.XP_EFFECTS.get(xp) || [0, 0, 0, 0]
+        return new TraitValues(
+            Math.max(this.joy - xpValues[0], 0),
+            Math.max(this.misery - xpValues[1], 0),
+            Math.max(this.passion - xpValues[2], 0),
+            Math.max(this.doubt - xpValues[3], 0)
+        )
+    }
+
     isValid() {
         return this.joy <= 4 &&
             this.misery <= 4 &&
             this.passion <= 4 &&
             this.doubt <= 4;
+    }
+
+    calculateMood(): Mood | 'OVERLOAD' {
+        if (!this.isValid()) return 'OVERLOAD'
+
+        const { joy, misery, passion, doubt } = this
+        const netJoy = joy - misery
+        const netMisery = -netJoy
+        const netPassion = passion - doubt
+        const netDoubt = -netPassion
+
+
+        if (netJoy === 0 && netPassion === 0) return 'BORED'
+        if (netJoy < 2 && misery < 2 && passion < 2 && doubt < 2) return 'NEUTRAL'
+
+        if (netJoy > 1) {
+            if (netPassion === 0) return 'HAPPY'
+            if (netPassion > 1) return 'LOVE'
+            if (netDoubt > 0) return 'SHY'
+            return 'ANXIOUS'
+        } else {
+            if (netMisery <= 1) return 'ANXIOUS'
+            if (passion < 2 && doubt < 2) return 'SAD'
+            if (netPassion > 1) return 'ANGRY'
+            if (netDoubt > 1) return 'SCARED'
+            return 'ANXIOUS'
+        }
     }
 }

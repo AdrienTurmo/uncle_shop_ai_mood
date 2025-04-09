@@ -7,4 +7,5 @@ export type Mood =
     'SCARED' |
     'HAPPY' |
     'LOVE' |
-    'SHY';
+    'SHY' |
+    'OVERLOAD';

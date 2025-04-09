@@ -1,28 +1,36 @@
 import * as React from 'react';
 import { createContext, useContext, useState } from 'react';
 import { Mood, Trait, TraitValues, XpSelector } from '@/type';
-import { calculateMood } from '@/services/MoodCalculator.ts';
 
 interface TraitsContextData {
     getValueOf: (trait: Trait) => number
-    changeValueOf: (trait: Trait, newValue: number) => void
+    increaseValueOf: (trait: Trait) => void
+    decreaseValueOf: (trait: Trait) => void
     getMood: () => Mood
     getMoodWithXp: () => Mood
     getXpOf: (trait: Trait) => number
     addXp: (xp: XpSelector) => void
+    removeXp: (xp: XpSelector) => void
     isValid: () => boolean
     reset: () => void
 }
 
 const TraitsContext: React.Context<TraitsContextData> = createContext({
     getValueOf: () => 0,
-    changeValueOf: () => {},
+    increaseValueOf: () => {
+    },
+    decreaseValueOf: () => {
+    },
     getMood: () => 'NEUTRAL',
     getMoodWithXp: () => 'NEUTRAL',
     getXpOf: () => 0,
-    addXp: () => {},
+    addXp: () => {
+    },
+    removeXp: () => {
+    },
     isValid: () => true,
-    reset: () => {},
+    reset: () => {
+    },
 } as TraitsContextData);
 
 const useTraitsContext = () => useContext(TraitsContext)
@@ -37,14 +45,16 @@ const TraitsContextProvider: React.FC<TraitsContextParams> = ({ children }) => {
 
     const getValueOf = (trait: Trait): number => traits.get(trait)
 
-    const changeValueOf = (trait: Trait, newValue: number) => setTraits(prev => prev.set(trait, newValue))
+    const increaseValueOf = (trait: Trait) => setTraits(prev => prev.increase(trait))
+    const decreaseValueOf = (trait: Trait) => setTraits(prev => prev.decrease(trait))
 
-    const getMood = () => calculateMood(traits)
-    const getMoodWithXp = () => calculateMood(traits.add(xps))
+    const getMood = () => traits.calculateMood()
+    const getMoodWithXp = () => (traits.add(xps)).calculateMood()
 
     const getXpOf = (trait: Trait): number => xps.get(trait)
 
     const addXp = (xp: XpSelector) => setXps(prev => prev.addXp(xp))
+    const removeXp = (xp: XpSelector) => setXps(prev => prev.remove(xp))
 
     const reset = () => {
         setTraits(new TraitValues(0, 0, 0, 0))
@@ -54,7 +64,18 @@ const TraitsContextProvider: React.FC<TraitsContextParams> = ({ children }) => {
     const isValid = () => (traits.add(xps)).isValid()
 
     return (
-        <TraitsContext.Provider value={{ getValueOf, changeValueOf, getMood, getMoodWithXp, getXpOf, addXp, reset, isValid }}>
+        <TraitsContext.Provider value={{
+            getValueOf,
+            increaseValueOf,
+            decreaseValueOf,
+            getMood,
+            getMoodWithXp,
+            getXpOf,
+            addXp,
+            removeXp,
+            reset,
+            isValid
+        }}>
             {children}
         </TraitsContext.Provider>
     );

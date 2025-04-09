@@ -17,7 +17,7 @@ const traitDisplayName = new Map<Trait, string>([
 ])
 
 export const TraitInput: React.FC<TraitInputParams> = ({ trait }) => {
-    const { getValueOf, changeValueOf, getXpOf } = useTraitsContext()
+    const { getValueOf, increaseValueOf, decreaseValueOf, getXpOf } = useTraitsContext()
     const value = getValueOf(trait)
     const xpValue = getXpOf(trait)
 
@@ -33,9 +33,8 @@ export const TraitInput: React.FC<TraitInputParams> = ({ trait }) => {
             <div>{traitDisplayName.get(trait)}</div>
             <NumberInput
                 value={value}
-                onChange={(newValue) => changeValueOf(trait, newValue)}
-                min={0}
-                max={4}
+                onPlus={() => increaseValueOf(trait)}
+                onMinus={() => decreaseValueOf(trait)}
             />
         </div>
     )
