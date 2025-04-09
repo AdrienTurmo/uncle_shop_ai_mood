@@ -2,6 +2,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 16px;
+
+    .Title {
+        font-size: larger;
+        font-weight: bold;
+    }
 
     .List {
         display: flex;

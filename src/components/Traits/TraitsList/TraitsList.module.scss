@@ -5,6 +5,11 @@
   align-items: center;
   gap: 8px;
 
+  .Title {
+    font-size: larger;
+    font-weight: bold;
+  }
+
   .List {
     display: flex;
     flex-direction: row;

@@ -1,4 +1,4 @@
-import { Mood, TraitValues } from '@/type';
+import { Mood } from '@/type';
 import { findPossiblePath } from '@/services/findXp.ts';
 import styles from './TargetMood.module.scss'
 import clsx from 'clsx';
@@ -43,7 +43,7 @@ export const TargetMood = () => {
 
     return (
         <div className={styles.TargetMood}>
-            <h3>Target Mood:</h3>
+            <div className={styles.Title}>Target Mood:</div>
             <div className={styles.MoodList}>
                 {selectButton('BORED')}
                 {selectButton('NEUTRAL')}
@@ -55,7 +55,7 @@ export const TargetMood = () => {
                 {selectButton('LOVE')}
                 {selectButton('SHY')}
             </div>
-            <h3>Possible path:</h3>
+            <div className={styles.Title}>Possible path:</div>
             <div className={styles.PathList}>
                 {selectedMood && displayXpSelected(findPossiblePath(traits, selectedMood))}
             </div>

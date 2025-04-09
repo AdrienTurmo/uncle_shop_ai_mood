@@ -1,4 +1,4 @@
-import { XpSelector } from '@/type/XpSelector.ts';
+import { XP_EFFECTS, XpSelector } from '@/type/XpSelector.ts';
 import { Mood } from '@/type/Moods.ts';
 
 export type Trait =
@@ -7,16 +7,7 @@ export type Trait =
     'PASSION' |
     'DOUBT';
 
-const XP_EFFECTS = new Map<XpSelector, number[]>([
-    ['Bath', [2, 0, 0, 0]],
-    ['Food', [2, 0, 0, 1]],
-    ['Cake', [1, 0, 1, 0]],
-    ['Nature', [0, 0, 2, 0]],
-    ['Hangover_Poo', [0, 1, 0, 2]],
-    ['Rain', [0, 1, 0, 0]],
-    ['Death', [0, 3, 0, 0]],
-    ['Stress', [0, 0, 0, 3]],
-])
+export const MAX_TRAIT_VALUE = 4
 
 export class TraitValues {
     readonly joy: number;
@@ -36,6 +27,10 @@ export class TraitValues {
         this.doubt = doubt;
     }
 
+    static fromArray(array: number[] | undefined = [0, 0, 0, 0]) {
+        return new TraitValues(array[0] || 0, array[1], array[2], array[3])
+    }
+
     get(trait: Trait) {
         switch (trait) {
             case 'JOY':
@@ -52,13 +47,13 @@ export class TraitValues {
     increase(trait: Trait) {
         switch (trait) {
             case 'JOY':
-                return new TraitValues(Math.min(4, this.joy + 1), this.misery, this.passion, this.doubt);
+                return new TraitValues(Math.min(MAX_TRAIT_VALUE, this.joy + 1), this.misery, this.passion, this.doubt);
             case 'MISERY':
-                return new TraitValues(this.joy, Math.min(4, this.misery + 1), this.passion, this.doubt);
+                return new TraitValues(this.joy, Math.min(MAX_TRAIT_VALUE, this.misery + 1), this.passion, this.doubt);
             case 'PASSION':
-                return new TraitValues(this.joy, this.misery, Math.min(4, this.passion + 1), this.doubt);
+                return new TraitValues(this.joy, this.misery, Math.min(MAX_TRAIT_VALUE, this.passion + 1), this.doubt);
             case 'DOUBT':
-                return new TraitValues(this.joy, this.misery, this.passion, Math.min(4, this.doubt + 1));
+                return new TraitValues(this.joy, this.misery, this.passion, Math.min(MAX_TRAIT_VALUE, this.doubt + 1));
         }
     }
 
@@ -105,10 +100,10 @@ export class TraitValues {
     }
 
     isValid() {
-        return this.joy <= 4 &&
-            this.misery <= 4 &&
-            this.passion <= 4 &&
-            this.doubt <= 4;
+        return this.joy <= MAX_TRAIT_VALUE &&
+            this.misery <= MAX_TRAIT_VALUE &&
+            this.passion <= MAX_TRAIT_VALUE &&
+            this.doubt <= MAX_TRAIT_VALUE;
     }
 
     calculateMood(): Mood | 'OVERLOAD' {

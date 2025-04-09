@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './TraitInput.module.scss'
-import { Trait } from '@/type';
+import { MAX_TRAIT_VALUE, Trait } from '@/type';
 import { NumberInput } from '@/components';
 import { useTraitsContext } from '@/context/TraitsContext.tsx';
 import clsx from 'clsx';
@@ -16,6 +16,14 @@ const traitDisplayName = new Map<Trait, string>([
     ['DOUBT', 'Doubt'],
 ])
 
+const POSSIBLE_TRAITS_VALUES = (() => {
+    const result = []
+    for (let i = MAX_TRAIT_VALUE; i > 0; i--) {
+        result.push(i)
+    }
+    return result
+})()
+
 export const TraitInput: React.FC<TraitInputParams> = ({ trait }) => {
     const { getValueOf, increaseValueOf, decreaseValueOf, getXpOf } = useTraitsContext()
     const value = getValueOf(trait)
@@ -24,10 +32,9 @@ export const TraitInput: React.FC<TraitInputParams> = ({ trait }) => {
     return (
         <div className={styles.TraitInput}>
             <div className={styles.SquareGroup}>
-                <div className={clsx(styles.Square, value + xpValue >= 4 && styles.VisibleRed, value >= 4 && styles.VisibleWhite)} />
-                <div className={clsx(styles.Square, value + xpValue >= 3 && styles.VisibleRed, value >= 3 && styles.VisibleWhite)} />
-                <div className={clsx(styles.Square, value + xpValue >= 2 && styles.VisibleRed, value >= 2 && styles.VisibleWhite)} />
-                <div className={clsx(styles.Square, value + xpValue >= 1 && styles.VisibleRed, value >= 1 && styles.VisibleWhite)} />
+                {POSSIBLE_TRAITS_VALUES.map(possibleValue => (
+                    <div className={clsx(styles.Square, value + xpValue >= possibleValue && styles.VisibleRed, value >= possibleValue && styles.VisibleWhite)} />
+                ))}
                 <div className={styles.HalfSquare} />
             </div>
             <div>{traitDisplayName.get(trait)}</div>

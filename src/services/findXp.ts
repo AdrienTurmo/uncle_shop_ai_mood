@@ -1,24 +1,24 @@
-import { Mood, TraitValues, XpSelector } from '@/type';
+import { MAX_TRAIT_VALUE, Mood, TraitValues, XP_EFFECTS, XpSelector } from '@/type';
 import { defaultXpsSelected, XpsSelected } from '@/context/TraitsContext.tsx';
 
 const XP_TO_TRAITS = new Map<XpSelector, TraitValues>([
-    ['Bath', new TraitValues(2, 0, 0, 0)],
-    ['Food', new TraitValues(2, 0, 0, 1)],
-    ['Cake', new TraitValues(1, 0, 1, 0)],
-    ['Nature', new TraitValues(0, 0, 2, 0)],
-    ['Hangover_Poo', new TraitValues(0, 1, 0, 2)],
-    ['Rain', new TraitValues(0, 1, 0, 0)],
-    ['Death', new TraitValues(0, 3, 0, 0)],
-    ['Stress', new TraitValues(0, 0, 0, 3)],
+    ['Bath', TraitValues.fromArray(XP_EFFECTS.get('Bath'))],
+    ['Food', TraitValues.fromArray(XP_EFFECTS.get('Food'))],
+    ['Cake', TraitValues.fromArray(XP_EFFECTS.get('Cake'))],
+    ['Nature', TraitValues.fromArray(XP_EFFECTS.get('Nature'))],
+    ['Hangover_Poo', TraitValues.fromArray(XP_EFFECTS.get('Hangover_Poo'))],
+    ['Rain', TraitValues.fromArray(XP_EFFECTS.get('Rain'))],
+    ['Death', TraitValues.fromArray(XP_EFFECTS.get('Death'))],
+    ['Stress', TraitValues.fromArray(XP_EFFECTS.get('Stress'))],
 ])
 
 export const calculateAllMoods = (): Map<Mood, TraitValues[]> => {
     const result = new Map<Mood, TraitValues[]>;
 
-    for (let j = 0; j <= 4; j++) {
-        for (let m = 0; m <= 4; m++) {
-            for (let p = 0; p <= 4; p++) {
-                for (let d = 0; d <= 4; d++) {
+    for (let j = 0; j <= MAX_TRAIT_VALUE; j++) {
+        for (let m = 0; m <= MAX_TRAIT_VALUE; m++) {
+            for (let p = 0; p <= MAX_TRAIT_VALUE; p++) {
+                for (let d = 0; d <= MAX_TRAIT_VALUE; d++) {
                     const trait = new TraitValues(j, m, p, d)
                     const mood = trait.calculateMood()
 

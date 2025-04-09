@@ -7,10 +7,8 @@ export const MoodDisplay: React.FC = () => {
 
     return (
         <div className={styles.MoodDisplay}>
-            <div>---</div>
             <div>Mood : {getMood()}</div>
             <div className={styles.NewMood}>New Mood : {getMoodWithXp()}</div>
-            <div>---</div>
         </div>
     )
 }

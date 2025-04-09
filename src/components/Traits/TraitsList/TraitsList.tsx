@@ -4,11 +4,11 @@ import { TraitInput } from '@/components';
 import { useTraitsContext } from '@/context/TraitsContext.tsx';
 
 export const TraitsList: React.FC = () => {
-    const { resetAll, isValid } = useTraitsContext()
+    const { resetAll, isValid, resetTraits } = useTraitsContext()
     return (
         <div className={styles.TraitsList}>
             <button type="button" onClick={() => resetAll()}>Reset All</button>
-            <h3>Traits:</h3>
+            <div className={styles.Title}>Traits:</div>
             {!isValid() && <div>OVERLOAD</div>}
             {isValid() && <div>----</div>}
             <div className={styles.List}>
@@ -17,6 +17,7 @@ export const TraitsList: React.FC = () => {
                 <TraitInput trait={'PASSION'} />
                 <TraitInput trait={'DOUBT'} />
             </div>
+            <button type='button' onClick={resetTraits}>Reset Traits</button>
         </div>
     )
 }

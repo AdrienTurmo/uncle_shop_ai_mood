@@ -11,8 +11,10 @@ export const MainPage: React.FC = () => {
         <TraitsContextProvider>
             <div className={styles.MainPage}>
                 <h1>Uncle Chop's Rocket Shop AI Mood Calculator</h1>
-                <TraitsList />
-                <MoodDisplay />
+                <div className={styles.TraitsAndMood}>
+                    <TraitsList />
+                    <MoodDisplay />
+                </div>
                 <XpSelectorDisplay />
                 <TargetMood />
             </div>

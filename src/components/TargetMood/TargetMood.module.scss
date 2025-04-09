@@ -5,6 +5,11 @@
   align-items: center;
   gap: 16px;
 
+  .Title {
+    font-size: larger;
+    font-weight: bold;
+  }
+
   .MoodList {
     display: flex;
     gap: 10px;
